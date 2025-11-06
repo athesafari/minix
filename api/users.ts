@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { supabaseFromEnv } from './_supabaseClient'
+import { supabaseFromEnv } from './_supabaseClient.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const supabase = supabaseFromEnv()
