@@ -2,9 +2,11 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+
   "functions": {
     "api/*.ts": {
-      "runtime": "@vercel/node@4.0.0" 
+      "runtime": "@vercel/node@3.0.0",
+      "nodeVersion": "18.x"
     }
   }
 }
