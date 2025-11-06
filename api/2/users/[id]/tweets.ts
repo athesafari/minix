@@ -1,6 +1,6 @@
 // api/2/users/[id]/tweets.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { supabaseFromEnv } from '../../../../_supabaseClient.js'  // ⚠️ Note the .js (for Node 22 ESM)
+import { supabaseFromEnv } from '../../../_supabaseClient.js'  // ⚠️ Note the .js (for Node 22 ESM)
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { id } = req.query
