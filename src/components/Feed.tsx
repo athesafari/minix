@@ -72,8 +72,12 @@ export function Feed({ currentUser }: { currentUser: User | null }) {
     const children = post.comments.filter((c) => (c.replied_to ?? null) === parentId)
     if (children.length === 0) return null
 
+    const threadClass = parentId
+      ? 'comment-thread nested'
+      : 'comment-thread nested root-thread'
+
     return (
-      <div className={parentId ? 'comment-thread nested' : 'comment-thread'}>
+      <div className={threadClass}>
         {children.map((comment) => (
           <div key={comment.id} className="comment-block">
             <div className="comment-header">

@@ -24,6 +24,7 @@ body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI,
 .btn-link.small { font-size: .75rem; }
 .comment-thread { display: flex; flex-direction: column; gap: 12px; }
 .comment-thread.nested { margin-left: 12px; padding-left: 12px; border-left: 2px solid #eee; }
+.comment-thread.root-thread { margin-left: 20px; padding-left: 20px; border-color: rgba(29, 155, 240, .15); }
 .comment-block { display: flex; flex-direction: column; gap: 4px; }
 .comment-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .comment-author { font-weight: 600; }
