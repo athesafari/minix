@@ -9,13 +9,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const supabase = supabaseFromEnv()
 
+  const normalizedRepliedTo =
+    typeof replied_to === 'string' && replied_to.trim().length > 0 ? replied_to : null
+
   // 1️⃣ Find conversation_id
   let conversation_id = post_id
-  if (replied_to) {
+  if (normalizedRepliedTo) {
     const { data: parent } = await supabase
       .from('comments')
       .select('conversation_id')
-      .eq('id', replied_to)
+      .eq('id', normalizedRepliedTo)
       .single()
     if (parent?.conversation_id) conversation_id = parent.conversation_id
   }
@@ -23,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // 2️⃣ Insert
   const { data, error } = await supabase
     .from('comments')
-    .insert([{ post_id, user_id, text, replied_to, conversation_id }])
+    .insert([{ post_id, user_id, text, replied_to: normalizedRepliedTo, conversation_id }])
     .select()
     .single()
 

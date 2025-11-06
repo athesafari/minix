@@ -6,7 +6,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method === 'GET') {
     const userId = req.query.userId as string | undefined
-    let query = supabase.from('posts').select('id, text, created_at, user_id, users(username), comments(id, text, created_at, users(username))').order('created_at', { ascending: false })
+    let query = supabase
+      .from('posts')
+      .select(
+        'id, text, created_at, user_id, users(username), comments(id, text, created_at, replied_to, users(username))'
+      )
+      .order('created_at', { ascending: false })
     if (userId) {
       query = query.eq('user_id', userId)
     }
@@ -15,7 +20,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const posts = (data || []).map((p:any) => ({
       id: p.id, text: p.text, created_at: p.created_at,
       username: p.users?.username || 'unknown',
-      comments: (p.comments || []).map((c:any)=>({ id:c.id, text:c.text, created_at:c.created_at, username:c.users?.username || 'unknown' }))
+      comments: (p.comments || []).map((c:any)=>({
+        id:c.id,
+        text:c.text,
+        created_at:c.created_at,
+        replied_to:c.replied_to ?? null,
+        username:c.users?.username || 'unknown'
+      }))
     }))
     return res.json({ posts })
   }
