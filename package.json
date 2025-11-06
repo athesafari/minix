@@ -1,0 +1,30 @@
+{
+  "name": "mock-twitter-msw",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postinstall": "msw init public --save"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^5.1.0",
+    "msw": "^2.3.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.10"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}
