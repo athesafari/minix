@@ -104,7 +104,12 @@ export function Feed({ currentUser }: { currentUser: User | null }) {
 
   return (
     <div>
-      <h3>Home</h3>
+      <div className="section-header">
+        <div>
+          <h3>Tweet</h3>
+          <p className="text-muted">Compose quick updates and view every tweet in chronological order.</p>
+        </div>
+      </div>
       <hr className="sep" />
       <div className="timeline">
         {posts.map(p => (

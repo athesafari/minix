@@ -1,0 +1,702 @@
+{
+  "info": {
+    "name": "twitter-mini API",
+    "_postman_id": "1c5ae0a9-a735-4ea0-8aa7-337f24da0b83",
+    "description": "Requests for every endpoint under /api. Import into Postman and set env vars (baseUrl, postId, etc.) as needed.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth & Users",
+      "item": [
+        {
+          "name": "Login /api/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo_user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "description": "Creates or fetches a user record."
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"demo_user\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"user\": {\n    \"id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n    \"username\": \"demo_user\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Users /api/users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "Returns all users ordered by created_at desc."
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"users\": [\n    {\n      \"id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n      \"username\": \"demo_user\",\n      \"created_at\": \"2024-05-01T12:45:00Z\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Feed /api/posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts"
+              ]
+            },
+            "description": "Returns all posts with user + nested comments."
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"posts\": [\n    {\n      \"id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n      \"text\": \"First post!\",\n      \"created_at\": \"2024-05-05T10:00:00Z\",\n      \"username\": \"demo_user\",\n      \"comments\": []\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Feed by user /api/posts?userId",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/posts?userId={{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}",
+                  "description": "Supabase user UUID"
+                }
+              ]
+            },
+            "description": "Filter posts by author id."
+          }
+        },
+        {
+          "name": "Create Post /api/posts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo_user\",\n  \"text\": \"Excited to announce our new product launch 🚀 #NewFeature\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"post\": {\n    \"id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n    \"user_id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n    \"text\": \"Excited to announce our new product launch 🚀 #NewFeature\",\n    \"created_at\": \"2024-05-05T10:05:00Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "List /api/comments?post_id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/comments?post_id={{postId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "post_id",
+                  "value": "{{postId}}",
+                  "description": "Post UUID to fetch threaded comments"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"1f36269e-ed17-4fa0-b4f2-6fa0496894dc\",\n    \"post_id\": \"{{postId}}\",\n    \"user_id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n    \"text\": \"Great point!\",\n    \"created_at\": \"2024-05-05T11:00:00Z\",\n    \"replied_to\": null,\n    \"username\": \"demo_user\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create (auto user lookup) /api/comments",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"postId\": \"{{postId}}\",\n  \"username\": \"demo_user\",\n  \"text\": \"Replying via /api/comments\",\n  \"replied_to\": \"{{parentCommentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comments"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"comment\": {\n    \"id\": \"8a9c1e4d-90fc-4f67-8472-4c908046284a\",\n    \"post_id\": \"{{postId}}\",\n    \"user_id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n    \"text\": \"Replying via /api/comments\",\n    \"replied_to\": \"{{parentCommentId}}\",\n    \"conversation_id\": \"{{conversationId}}\",\n    \"created_at\": \"2024-05-05T11:05:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create (direct ids) /api/comments/create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"post_id\": \"{{postId}}\",\n  \"user_id\": \"{{userId}}\",\n  \"text\": \"Reply created via admin endpoint\",\n  \"replied_to\": \"{{parentCommentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comments/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "comments",
+                "create"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Created",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Reply created\",\n  \"comment\": {\n    \"id\": \"f81d9ed9-c1bd-4cb8-b44a-d326b6f5d6ec\",\n    \"post_id\": \"{{postId}}\",\n    \"user_id\": \"{{userId}}\",\n    \"text\": \"Reply created via admin endpoint\",\n    \"replied_to\": \"{{parentCommentId}}\",\n    \"conversation_id\": \"{{conversationId}}\",\n    \"created_at\": \"2024-05-05T11:10:00Z\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Twitter v2 Mock",
+      "item": [
+        {
+          "name": "User timeline /api/2/users/:id/tweets",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/2/users/{{userId}}/tweets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "users",
+                "{{userId}}",
+                "tweets"
+              ]
+            },
+            "description": "Matches GET https://api.twitter.com/2/users/:id/tweets (MSW demo)."
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n      \"text\": \"Excited to announce our new product launch 🚀 #NewFeature\",\n      \"conversation_id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n      \"public_metrics\": {\n        \"retweet_count\": 0,\n        \"reply_count\": 2,\n        \"like_count\": 0,\n        \"quote_count\": 0,\n        \"bookmark_count\": 0,\n        \"impression_count\": 0\n      }\n    }\n  ],\n  \"meta\": {\n    \"result_count\": 1,\n    \"newest_id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n    \"oldest_id\": \"71bb0678-899d-4a9c-9ae1-03a773cbeaf0\",\n    \"next_token\": null\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search conversation /api/2/tweets/search/recent",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/2/tweets/search/recent?query=conversation_id:{{conversationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "tweets",
+                "search",
+                "recent"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "conversation_id:{{conversationId}}",
+                  "description": "Required format conversation_id:<rootTweetId>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Success",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"8a9c1e4d-90fc-4f67-8472-4c908046284a\",\n      \"conversation_id\": \"{{conversationId}}\",\n      \"text\": \"Replying via /api/comments\",\n      \"referenced_tweets\": [\n        {\n          \"type\": \"replied_to\",\n          \"id\": \"{{parentCommentId}}\"\n        }\n      ]\n    }\n  ],\n  \"includes\": {\n    \"users\": [\n      {\n        \"id\": \"2c1e0cf0-b70c-4b04-a59c-86b79d55c6cc\",\n        \"username\": \"demo_user\"\n      }\n    ],\n    \"media\": []\n  },\n  \"meta\": {\n    \"result_count\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Tweet /api/2/tweets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-user-id",
+                "value": "{{userId}}",
+                "description": "Optional; alternatively set user_id/username in body."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Excited to announce our new product launch 🚀 #NewFeature\",\n  \"media\": {\n    \"media_ids\": [\"1146654567674912769\"],\n    \"tagged_user_ids\": [\"2244994945\"]\n  },\n  \"reply_settings\": \"mentionedUsers\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/2/tweets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "tweets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"data\": {\n    \"id\": \"1346889436626259968\",\n    \"text\": \"Excited to announce our new product launch 🚀 #NewFeature\",\n    \"author_id\": \"{{userId}}\",\n    \"conversation_id\": \"1346889436626259968\",\n    \"reply_settings\": \"mentionedUsers\",\n    \"public_metrics\": {\n      \"retweet_count\": 0,\n      \"reply_count\": 0,\n      \"like_count\": 0,\n      \"quote_count\": 0,\n      \"bookmark_count\": 0,\n      \"impression_count\": 0\n    },\n    \"attachments\": {\n      \"media_keys\": [\"1146654567674912769\"]\n    }\n  },\n  \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reply Tweet /api/2/tweets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-user-id",
+                "value": "{{userId}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Thanks for sharing! I totally agree with your point.\",\n  \"reply\": {\n    \"in_reply_to_tweet_id\": \"{{tweetId}}\",\n    \"exclude_reply_user_ids\": [\"2244994945\"]\n  },\n  \"reply_settings\": \"following\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/2/tweets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "tweets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Reply",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"data\": {\n    \"id\": \"a3c0bcde-5217-4d5a-af4a-7eb50b523765\",\n    \"text\": \"Thanks for sharing! I totally agree with your point.\",\n    \"conversation_id\": \"{{conversationId}}\",\n    \"referenced_tweets\": [\n      {\n        \"type\": \"replied_to\",\n        \"id\": \"{{tweetId}}\"\n      }\n    ]\n  },\n  \"errors\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Direct Messages",
+      "item": [
+        {
+          "name": "List conversations /api/2/dm_conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/2/dm_conversations?user_id={{dmSenderId}}&username={{dmSenderHandle}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "dm_conversations"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{dmSenderId}}",
+                  "description": "Required user id for the authenticated account"
+                },
+                {
+                  "key": "username",
+                  "value": "{{dmSenderHandle}}",
+                  "description": "Optional handle for display/auto provisioning"
+                }
+              ]
+            },
+            "description": "Mirrors GET https://api.twitter.com/2/dm_conversations. Returns every DM thread for the provided user id."
+          },
+          "response": [
+            {
+              "name": "200 Conversations",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"2084c2cb-7df6-4f5e-8f87-abcdef123456\",\n      \"type\": \"dm_conversation\",\n      \"participants\": [\n        \"00000000-0000-4000-8000-000000000000\",\n        \"11111111-1111-4111-8111-111111111111\"\n      ],\n      \"last_message\": {\n        \"id\": \"3c854d20-18d9-4f76-8f2a-f4239a7a7200\",\n        \"text\": \"Hey, are you available?\",\n        \"sender_id\": \"11111111-1111-4111-8111-111111111111\",\n        \"created_at\": \"2024-07-02T12:13:18.000Z\"\n      }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "List messages /api/2/dm_conversations/:id/messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/2/dm_conversations/{{dmConversationId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "dm_conversations",
+                "{{dmConversationId}}",
+                "messages"
+              ]
+            },
+            "description": "Retrieves the ordered events for a single conversation id."
+          },
+          "response": [
+            {
+              "name": "200 Messages",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"2a2d9b0f-91ef-49fd-8f7e-6e7db86b70a2\",\n      \"text\": \"Hey, are you available?\",\n      \"sender_id\": \"11111111-1111-4111-8111-111111111111\",\n      \"created_at\": \"2024-07-02T12:13:00.000Z\"\n    },\n    {\n      \"id\": \"3c854d20-18d9-4f76-8f2a-f4239a7a7200\",\n      \"text\": \"Yes, what's up?\",\n      \"sender_id\": \"00000000-0000-4000-8000-000000000000\",\n      \"created_at\": \"2024-07-02T12:13:18.000Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send DM (existing conversation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender_id\": \"{{dmSenderId}}\",\n  \"message\": {\n    \"text\": \"Mock API is live!\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/2/dm_conversations/{{dmConversationId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "dm_conversations",
+                "{{dmConversationId}}",
+                "messages"
+              ]
+            },
+            "description": "POSTs into an existing thread."
+          },
+          "response": [
+            {
+              "name": "201 DM sent",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"data\": {\n    \"dm_event_id\": \"4b5b6570-5529-4bdf-9c6c-0987654321ab\",\n    \"conversation_id\": \"2084c2cb-7df6-4f5e-8f87-abcdef123456\",\n    \"message\": {\n      \"id\": \"4b5b6570-5529-4bdf-9c6c-0987654321ab\",\n      \"text\": \"Mock API is live!\",\n      \"sender_id\": \"00000000-0000-4000-8000-000000000000\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send DM (start new conversation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender_id\": \"{{dmSenderId}}\",\n  \"message\": {\n    \"text\": \"Hi there – excited to connect!\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/2/dm_conversations/{{dmParticipantId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "2",
+                "dm_conversations",
+                "{{dmParticipantId}}",
+                "messages"
+              ]
+            },
+            "description": "Calls the participant-based POST to automatically create a thread if one does not exist."
+          },
+          "response": [
+            {
+              "name": "201 DM created",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"data\": {\n    \"dm_event_id\": \"5c5d7573-74b3-4185-86bb-76543210abcd\",\n    \"conversation_id\": \"2084c2cb-7df6-4f5e-8f87-abcdef123456\",\n    \"message\": {\n      \"id\": \"5c5d7573-74b3-4185-86bb-76543210abcd\",\n      \"text\": \"Hi there – excited to connect!\",\n      \"sender_id\": \"00000000-0000-4000-8000-000000000000\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload media /api/upload/media",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filename\": \"demo.png\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/media",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "upload",
+                "media"
+              ]
+            },
+            "description": "Returns a mock media_id + URL that can be referenced inside DM payloads."
+          },
+          "response": [
+            {
+              "name": "201 Media",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"data\": {\n    \"media_id\": \"d22a8d13-1337-4333-9444-123456789abc\",\n    \"media_url\": \"https://mock.api/media/d22a8d13-1337-4333-9444-123456789abc\",\n    \"uploaded_at\": \"2024-07-02T12:13:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Directory /api/mock/dm_directory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/mock/dm_directory?exclude_id={{dmSenderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mock",
+                "dm_directory"
+              ],
+              "query": [
+                {
+                  "key": "exclude_id",
+                  "value": "{{dmSenderId}}",
+                  "description": "Exclude the current account from the directory response"
+                }
+              ]
+            },
+            "description": "Helper endpoint that returns the available mock contacts for the UI."
+          },
+          "response": [
+            {
+              "name": "200 Directory",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"11111111-1111-4111-8111-111111111111\",\n      \"username\": \"launch-labs\",\n      \"display_name\": \"Launch Labs\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "userId",
+      "value": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "key": "postId",
+      "value": "11111111-2222-4333-8444-555555555555"
+    },
+    {
+      "key": "parentCommentId",
+      "value": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee"
+    },
+    {
+      "key": "conversationId",
+      "value": "ffffffff-1111-4222-8333-444444444444"
+    },
+    {
+      "key": "tweetId",
+      "value": "1346889436626259968"
+    },
+    {
+      "key": "dmSenderId",
+      "value": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "key": "dmSenderHandle",
+      "value": "demo_user"
+    },
+    {
+      "key": "dmConversationId",
+      "value": "replace-with-existing-conversation-id"
+    },
+    {
+      "key": "dmParticipantId",
+      "value": "11111111-1111-4111-8111-111111111111"
+    },
+    {
+      "key": "dmMediaId",
+      "value": "d22a8d13-1337-4333-9444-123456789abc"
+    }
+  ]
+}

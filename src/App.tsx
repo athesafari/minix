@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Login } from './components/Login'
 import { Composer } from './components/Composer'
 import { Feed } from './components/Feed'
+import { DirectMessages } from './components/DirectMessages'
 
 type User = { id: string; username: string }
 
@@ -61,6 +62,9 @@ export default function App() {
       </div>
       <div className="card">
         <Feed currentUser={user} />
+      </div>
+      <div className="card">
+        <DirectMessages currentUser={user} />
       </div>
     </div>
   )

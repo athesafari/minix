@@ -8,8 +8,12 @@ body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI,
 .card { background: white; border: 1px solid #eee; border-radius: 12px; padding: 12px; }
 .btn { background: var(--blue); color: white; border: none; padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 700; }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
-.input, textarea { width:100%; padding: 10px; border:1px solid #e6ecf0; border-radius: 10px; }
+.btn.secondary { background: rgba(29,155,240,.1); color: var(--blue); }
+.input, textarea, select { width:100%; padding: 10px; border:1px solid #e6ecf0; border-radius: 10px; background:white; }
 .row { display:flex; align-items:center; gap:8px; }
+.meta { color: var(--muted); font-size: .8rem; }
+.text-muted { color: var(--muted); font-size: .85rem; margin: 0; }
+.section-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
 .timeline { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 4px 0 4px 32px; }
 .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 15px; width: 2px; background: rgba(29, 155, 240, .2); }
 .post { position: relative; background: white; border: 1px solid #e6ecf0; border-radius: 16px; padding: 12px 16px; box-shadow: 0 1px 2px rgba(15, 20, 25, 0.08); }
@@ -32,3 +36,37 @@ body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI,
 .comment-body { color: var(--text); font-size: .95rem; }
 .reply-inline { margin-top: 8px; margin-left: 8px; }
 hr.sep { border:0; border-top:1px solid #eee; margin:8px 0; }
+.dm-panel { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+.dm-sidebar { border-right:1px solid #eee; padding-right: 12px; display:flex; flex-direction:column; gap:12px; }
+.dm-list { display:flex; flex-direction:column; gap:6px; max-height:280px; overflow:auto; }
+.dm-convo { border:1px solid #eee; border-radius:10px; padding:8px; text-align:left; background:white; cursor:pointer; display:flex; flex-direction:column; gap:4px; }
+.dm-convo.active { border-color: var(--blue); box-shadow:0 0 0 1px rgba(29,155,240,.2); }
+.dm-convo-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+.dm-convo-preview { font-size:.9rem; color: var(--muted); text-align:left; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.dm-thread { display:flex; flex-direction:column; gap:12px; }
+.dm-thread-header { display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px solid #eee; }
+.dm-messages { display:flex; flex-direction:column; gap:10px; min-height:260px; max-height:360px; overflow:auto; padding-right:4px; }
+.dm-messages.loading { opacity:.6; }
+.dm-message { display:flex; }
+.dm-message.self { justify-content:flex-end; }
+.dm-bubble { background:#f1f5f9; border-radius:18px; padding:10px 14px; max-width:80%; }
+.dm-message.self .dm-bubble { background:var(--blue); color:white; }
+.dm-meta { font-size:.75rem; color:#64748b; margin-top:4px; }
+.dm-message.self .dm-meta { color:rgba(255,255,255,.8); }
+.dm-composer { display:flex; flex-direction:column; gap:8px; border-top:1px solid #eee; padding-top:8px; }
+.dm-new { display:flex; flex-direction:column; gap:6px; border:1px solid #eee; border-radius:12px; padding:8px; }
+.dm-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.dm-error { background: #fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:8px 10px; border-radius:8px; margin-bottom:12px; font-size:.85rem; }
+.dm-empty { color: var(--muted); text-align:center; padding:24px 0; }
+.dm-modal-overlay { position:fixed; inset:0; background:rgba(15,20,25,.45); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; z-index:50; }
+.dm-modal { width:min(520px, 100%); background:white; border-radius:16px; padding:16px; border:1px solid #e2e8f0; box-shadow:0 20px 45px rgba(15,20,25,.2); display:flex; flex-direction:column; gap:12px; max-height:80vh; }
+.dm-modal-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.dm-thread-actions { display:flex; align-items:center; gap:16px; }
+@media (max-width: 840px) {
+  .dm-modal-overlay { align-items:flex-end; padding:0; }
+  .dm-modal { border-radius:16px 16px 0 0; max-height:90vh; }
+}
+@media (max-width: 840px) {
+  .dm-panel { grid-template-columns: 1fr; }
+  .dm-sidebar { border-right:0; border-bottom:1px solid #eee; padding-right:0; padding-bottom:12px; }
+}

@@ -10,11 +10,16 @@ A tiny Twitter-like UI with:
 
 ```bash
 npm install
-# This also runs: npx msw init public --save  (to place mockServiceWorker.js)
+# ensure .env.local has SUPABASE_URL + SUPABASE_ANON_KEY
+
+# Terminal 1 – serverless API (port 3000)
+vercel dev --listen 3000
+
+# Terminal 2 – Vite dev server (port 5173)
 npm run dev
 ```
 
-Open http://localhost:5173
+Open http://localhost:5173 — `/api/*` calls are proxied to the API running on http://localhost:3000.
 
 ## API Contract used by the UI
 
@@ -23,6 +28,11 @@ Open http://localhost:5173
 - `GET /api/posts?userId=...` → filter by user_id
 - `POST /api/posts` → body: { username, text }
 - `POST /api/comments` → body: { postId, username, text }
+- `GET /api/2/dm_conversations?user_id=<uuid>` → persisted DM threads
+- `GET /api/2/dm_conversations/:conversation_id/messages`
+- `POST /api/2/dm_conversations/:conversation_id/messages`
+- `POST /api/2/dm_conversations/:participant_id/messages`
+- `POST /api/upload/media` → DM media helper
 
 MSW handler proxies the Twitter endpoint to our API:
 - `GET https://api.twitter.com/2/users/:id/tweets?...` returns a shaped response from persisted posts.
@@ -54,6 +64,38 @@ create table if not exists comments (
   created_at timestamp with time zone default now()
 );
 
+-- Direct Messages
+create table if not exists dm_conversations (
+  id uuid primary key,
+  created_at timestamp with time zone default now(),
+  last_activity_at timestamp with time zone default now(),
+  last_message_id uuid
+);
+
+create table if not exists dm_participants (
+  id uuid primary key default gen_random_uuid(),
+  conversation_id uuid references dm_conversations(id) on delete cascade not null,
+  user_id uuid references users(id) on delete cascade not null,
+  created_at timestamp with time zone default now(),
+  unique (conversation_id, user_id)
+);
+
+create table if not exists dm_media (
+  id uuid primary key,
+  filename text,
+  media_url text not null,
+  created_at timestamp with time zone default now()
+);
+
+create table if not exists dm_messages (
+  id uuid primary key,
+  conversation_id uuid references dm_conversations(id) on delete cascade not null,
+  sender_id uuid references users(id) on delete cascade not null,
+  text text not null,
+  media_id uuid references dm_media(id),
+  created_at timestamp with time zone default now()
+);
+
 -- helpful views for joins (optional)
 create view posts_with_rel as
 select p.*, u.username from posts p left join users u on u.id = p.user_id;
@@ -69,6 +111,10 @@ select c.*, u.username from comments c left join users u on u.id = c.user_id;
 alter table users enable row level security;
 alter table posts enable row level security;
 alter table comments enable row level security;
+alter table dm_conversations enable row level security;
+alter table dm_participants enable row level security;
+alter table dm_media enable row level security;
+alter table dm_messages enable row level security;
 
 create policy "allow all users read/write users" on users
 for all using (true) with check (true);
@@ -77,6 +123,18 @@ create policy "allow all users read/write posts" on posts
 for all using (true) with check (true);
 
 create policy "allow all users read/write comments" on comments
+for all using (true) with check (true);
+
+create policy "allow all users read/write dm_conversations" on dm_conversations
+for all using (true) with check (true);
+
+create policy "allow all users read/write dm_participants" on dm_participants
+for all using (true) with check (true);
+
+create policy "allow all users read/write dm_media" on dm_media
+for all using (true) with check (true);
+
+create policy "allow all users read/write dm_messages" on dm_messages
 for all using (true) with check (true);
 ```
 
@@ -112,3 +170,4 @@ SUPABASE_ANON_KEY=...
 
 - To seed data, login as a username then create a few posts; they are stored in Supabase and survive reloads/sessions.
 - The UI is intentionally minimal, styled slightly like Twitter.
+- DM any of the mock contacts (Launch Labs, Growth Mate, DM Bot) and the Supabase tables will persist the thread so the mock Twitter endpoints return exactly what you see in the UI.
